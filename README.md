@@ -1,16 +1,30 @@
-# Atticus_Vim
+## 插件管理[vim-plug](https://github.com/junegunn/vim-plug)
 
-## .vimrc
+```sh
+curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+```
 
-replace ~/.vimrc
+### `~/.vimrc`
 
-## Plug-in unit
+```vim
+call plug#begin('~/.vim/plugged')
+" Shorthand notation; fetches https://github.com/junegunn/vim-easy-align
+Plug 'junegunn/vim-easy-align'
+" 延迟按需加载，使用到命令的时候再加载或者打开对应文件类型才加载
+Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
+" 确定插件仓库中的分支或者 tag
+Plug 'rdnetto/YCM-Generator', { 'branch': 'stable' }
+call plug#end()
+```
+### Commands
 
-1. unzip taglist and winmanager
-2. get doc and plugin
-3. cd ~ and mkdir .vim and cd .vim
-4. cd .vim and mkdir doc and mkdir plugin
-5. cp doc and plugin into ~/.vim/doc and plugin
-
-
-Over~.~
+|Command|Description|
+|:-|:-|
+| `PlugInstall [name ...] [#threads]` | Install plugins|
+| `PlugUpdate [name ...] [#threads]`  | Install or update plugins|
+| `PlugClean[!]`| Remove unlisted plugins (bang version will clean without prompt) |
+| `PlugUpgrade` | Upgrade vim-plug itself|
+| `PlugStatus` | Check the status of plugins|
+| `PlugDiff`| Examine changes from the previous update and the pending changes|
+| `PlugSnapshot[!] [output path]`| Generate script for restoring the current snapshot of the plugins  |
