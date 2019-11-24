@@ -5,6 +5,7 @@ set nocompatible    " 不兼容vi模式
 set history=1000    " 设置历史记录步数
 set autoread        " 当文件在外部被修改时，自动更新该文件
 set showmatch       " 高亮显示匹配的括号([{和}])
+set matchtime=1
 set ruler           " 设置标尺
 filetype on         " 检测文件类型
 set mouse=a         " 激活鼠标使用
@@ -22,7 +23,8 @@ set hlsearch        " 并高亮所有结果
 set ignorecase      " 搜索时忽略大小写
 set smartcase
 set showcmd
-set cmdheight=2
+set cmdheight=1
+
 au FileType c,cpp,python,vim set textwidth=80
 set colorcolumn=81
 
@@ -39,6 +41,18 @@ else
     set fileformats=unix,mac,dos
 endif
 
+""""""""""""space"""""""""""""""
+noremap <leader>m :%s/<C-V><C-M>//ge<CR>  " 移除 Windows 文件结尾的 `^M`
+" 这个函数通过替换命令删除行尾空格
+func! DeleteTrailingWS()
+    exec "normal mz"
+    %s/\s\+$//ge
+    exec "normal `z"
+endfunc
+
+" 保存时自动删除行尾空格
+au BufWrite * :call DeleteTrailingWS()
+map <leader>W :call DeleteTrailingWS()<CR>
 
 """""""""""编码设置""""""""""""""
 set encoding=utf-8          "设置编码"
