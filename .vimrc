@@ -29,7 +29,7 @@ set cmdheight=2     " 指令输入行高
 set showmode        " 显示vim模式
 set scrolloff=7     " 光标上下行保留行数
 set paste           " 设置粘贴模式
-
+set t_Co=256
 """""""""""""""""""""""""""""""""""""""""""""""""""
 " 显示空格和tab
 set list listchars=tab:→\ ,trail:·
@@ -70,16 +70,22 @@ Plug 'scrooloose/nerdtree'                  " 文件管理器，目录
 Plug 'octol/vim-cpp-enhanced-highlight'     " cpp语法高亮
 Plug 'vim-airline/vim-airline'              " 状态栏
 Plug 'Raimondi/delimitMate'                 " 括号补全
-"Plug 'universal-ctags/ctags'               " universal-ctags
-"Plug 'majutsushi/tagbar'                   " 代码提纲             
+Plug 'universal-ctags/ctags'               " universal-ctags
+Plug 'majutsushi/tagbar'                   " 代码提纲
 "Plug 'dense-analysis/ale'                  " 代码检测
 "Plug 'ycm-core/YouCompleteMe'              " 补全
-"Plug 'ludovicchabant/vim-gutentags'        " 自动生成ctags
+Plug 'ludovicchabant/vim-gutentags'        " 自动生成ctags
 "--------theme--------"
 "Plug 'altercation/vim-colors-solarized'    " solarized主题
 Plug 'morhetz/gruvbox'                      " gruvbox
 call plug#end()
-
+""""""""""""""""""tagbar"""""""""""""""""""""""""""""
+nmap <silent> <F9> :TagbarToggle<CR>
+let g:tagbar_ctags_bin = 'ctags'
+let g:tagbar_width = 30
+let g:tagbar_sort = 0
+autocmd BufReadPost *.cpp,*.c,*.h,*.hpp,*.cc,*.cxx call tagbar#autoopen()
+"""""""""""""""""""""""""""""""""""""""""""""""""""""
 """"""""""""""""""NERDTree文件管理器"""""""""""""""""
 "ctrl+w+w，光标自动在左右侧窗口切换
 map <C-n> :NERDTreeToggle<CR>
@@ -94,7 +100,45 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isT
 
 """""""""""""""""delimitMate括号补全"""""""""""""""""
 au FileType python let b:delimitMate_nesting_quotes = ['"']
+"""""""""""""""""universal-ctags"""""""""""""""""""""
+"set tags=./.tags;,.tags
+set autochdir
+"""""""""""""""""vim-gutentags"""""""""""""""""""""""
+let g:gutentags_project_root = ['.root','.svn','.git','.project']
+let g:gutentags_ctags_tagfile = '.tags'
+let s:vim_tags = expand('~/.cache/tags')
+let g:gutentags_cache_dir = s:vim_tags
+let g:gutentags_ctags_extra_args = ['--fields=+niazS','--extra=+q','--c++-kinds=+px','--c-kinds=+px']
+let g:gutentags_trace = 1
+if !isdirectory(s:vim_tags)
+	silent! call mkdir(s:vim_tags, 'p')
+endif
+"""""""""""""""""YouComplete"""""""""""""""""""""""""
+let g:ycm_add_preview_to_completeopt = 0
+let g:ycm_show_diagnostics_ui = 0
+let g:ycm_server_log_level = 'info'
+let g:ycm_min_num_identifier_candidate_chars = 2
+let g:ycm_collect_identifiers_from_comments_and_strings = 1
+let g:ycm_complete_in_strings = 1
+let g:ycm_key_invoke_completion = '<c-z>'
+set completeopt=menu,menuone
 
+noremap<c-z> <NOP>
+
+let g:ycm_semantic_triggers = {
+			\'c,cpp,python,java,go,erlang,perl':['re!\w{2}'],
+			\'cs,lua,javascript':['re!\w{2}'],
+			\}
+
+let g:ycm_filetype_whitelist = {
+			\ "c":1,
+			\ "cpp":1,
+			\ "objc":1,
+			\ "sh":1,
+			\ "zsh":1,
+			\ "zimbu":1,
+			\}
+"""""""""""""""""""""""""""""""""""""""""""""""""""""
 """"""""""""""""""theme主题设置""""""""""""""""""""""
 colorscheme gruvbox
 set background=dark
