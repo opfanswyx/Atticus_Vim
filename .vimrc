@@ -1,4 +1,4 @@
-"""""""""""""""""basic seting"""""""""""""""""""
+""""" 基础无插件设置
 set nu              " 显示行号
 set relativenumber  " 相对行号
 syntax on           " 自动语法高亮
@@ -8,7 +8,7 @@ set history=1000    " 设置历史记录步数
 set autoread        " 当文件在外部被修改时，自动更新该文件
 set autowrite       " 自动保存
 set autochdir       " 可打开目录
-set showmatch       " 高亮显示匹配的括号([{和}])
+set showmatch       " 高亮显示匹配的括号
 set matchtime=1     " 高亮时长
 set ruler           " 设置标尺
 set mouse=a         " 激活鼠标使用
@@ -29,33 +29,32 @@ set cmdheight=2     " 指令输入行高
 set showmode        " 显示vim模式
 set scrolloff=7     " 光标上下行保留行数
 set paste           " 设置粘贴模式
-set t_Co=256
-"""""""""""""""""""""""""""""""""""""""""""""""""""
-" 显示空格和tab
+set t_Co=256        " 256色域，某些vim不设置不会显示主题色彩
+
+""""" 显示空格和tab
 set list listchars=tab:→\ ,trail:·
 
-" 设置以下文本宽度80列，第81列高亮
+""""" 设置以下文本宽度80列，第81列高亮
 au FileType c,cpp,python,vim set textwidth=80
 set colorcolumn=81
 
-" 设置以下文本折行
+""""" 设置以下文本折行
 au FileType text,markdown,html,xml set wrap
 set linebreak       " 折行时，以单词为界，以免切断单词
 set breakindent     " 折行后的后续行，使用与第一行相同的缩进
 
-" 不同平台，设置不同的行尾符，即 EOL
-" 注意：在 Mac 平台，也是 unix 优先；自 OS X 始，行尾符与 Unix 一致，
-" 都是 `\n` 而不是 `\r`
+""""" 不同平台，设置不同的行尾符，即EOL
+""""" 注意：在Mac平台，也是unix优先；自OS X始，行尾符与Unix一致，都是`\n`而不是`\r`
 if has("win32")
     set fileformats=dos,unix,mac
 else
     set fileformats=unix,mac,dos
 endif
 
-" 移除 Windows 文件结尾的 `^M`
+""""" 移除Windows文件结尾的`^M`
 noremap <leader>m :%s/<C-V><C-M>//ge<CR>  
 
-"""""""""""""""""""""编码设置""""""""""""""""""""""""
+""""" 编码设置
 set encoding=utf-8          "设置编码"
 set fencs=utf-8,ucs-bom,shift-jis,gb18030,gbk,gb2312,cp936
 set fileencodings=utf-8     "设置文件编码"
@@ -63,30 +62,33 @@ set termencoding=utf-8      "设置终端编码"
 set langmenu=zh_CN.UTF-8    "设置语言编码"
 set helplang=cn             "帮助语言"
 
-"--------------------------------------------------"
-"""""""""""""""""""""vim-plug"""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+""""" vim-plug插件管理器
 call plug#begin('~/.vim/plugged')
-Plug 'scrooloose/nerdtree'                  " 文件管理器，目录
-Plug 'octol/vim-cpp-enhanced-highlight'     " cpp语法高亮
-Plug 'vim-airline/vim-airline'              " 状态栏
-Plug 'Raimondi/delimitMate'                 " 括号补全
-Plug 'universal-ctags/ctags'               " universal-ctags
-Plug 'majutsushi/tagbar'                   " 代码提纲
-"Plug 'dense-analysis/ale'                  " 代码检测
-"Plug 'ycm-core/YouCompleteMe'              " 补全
-Plug 'ludovicchabant/vim-gutentags'        " 自动生成ctags
-"--------theme--------"
-"Plug 'altercation/vim-colors-solarized'    " solarized主题
-Plug 'morhetz/gruvbox'                      " gruvbox
+Plug 'scrooloose/nerdtree'                      " 文件管理器，目录
+Plug 'octol/vim-cpp-enhanced-highlight'         " cpp语法高亮
+Plug 'vim-airline/vim-airline'                  " 状态栏
+Plug 'Raimondi/delimitMate'                     " 括号补全
+Plug 'universal-ctags/ctags'                    " universal-ctags
+Plug 'majutsushi/tagbar'                        " 代码提纲             
+"Plug 'dense-analysis/ale'                      " 代码检测
+"Plug 'ycm-core/YouCompleteMe'                  " 补全
+Plug 'ludovicchabant/vim-gutentags'             " 自动生成ctags
+Plug 'Yggdroot/LeaderF', { 'do': './install.sh' } "查找与模糊匹配
+"--------theme主题--------"
+"Plug 'altercation/vim-colors-solarized'        " solarized主题
+Plug 'morhetz/gruvbox'                          " gruvbox
 call plug#end()
-""""""""""""""""""tagbar"""""""""""""""""""""""""""""
+
+""""" 具体插件设置
+""""" tagbar
 nmap <silent> <F9> :TagbarToggle<CR>
 let g:tagbar_ctags_bin = 'ctags'
-let g:tagbar_width = 30
 let g:tagbar_sort = 0
 autocmd BufReadPost *.cpp,*.c,*.h,*.hpp,*.cc,*.cxx call tagbar#autoopen()
-"""""""""""""""""""""""""""""""""""""""""""""""""""""
-""""""""""""""""""NERDTree文件管理器"""""""""""""""""
+
+""""" NERDTree文件管理器
 "ctrl+w+w，光标自动在左右侧窗口切换
 map <C-n> :NERDTreeToggle<CR>
 let g:NERDTreeShowLineNumbers=1         " 窗口是否显示行号
@@ -98,12 +100,14 @@ let g:NERDTreeSize=30                   " 窗口尺寸
 " 当NERDTree为剩下的唯一窗口时自动关闭
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
-"""""""""""""""""delimitMate括号补全"""""""""""""""""
+""""" delimitMate括号补全
 au FileType python let b:delimitMate_nesting_quotes = ['"']
-"""""""""""""""""universal-ctags"""""""""""""""""""""
+
+""""" universal-ctags
 "set tags=./.tags;,.tags
 set autochdir
-"""""""""""""""""vim-gutentags"""""""""""""""""""""""
+
+""""" vim-gutentags
 let g:gutentags_project_root = ['.root','.svn','.git','.project']
 let g:gutentags_ctags_tagfile = '.tags'
 let s:vim_tags = expand('~/.cache/tags')
@@ -113,33 +117,8 @@ let g:gutentags_trace = 1
 if !isdirectory(s:vim_tags)
 	silent! call mkdir(s:vim_tags, 'p')
 endif
-"""""""""""""""""YouComplete"""""""""""""""""""""""""
-let g:ycm_add_preview_to_completeopt = 0
-let g:ycm_show_diagnostics_ui = 0
-let g:ycm_server_log_level = 'info'
-let g:ycm_min_num_identifier_candidate_chars = 2
-let g:ycm_collect_identifiers_from_comments_and_strings = 1
-let g:ycm_complete_in_strings = 1
-let g:ycm_key_invoke_completion = '<c-z>'
-set completeopt=menu,menuone
 
-noremap<c-z> <NOP>
-
-let g:ycm_semantic_triggers = {
-			\'c,cpp,python,java,go,erlang,perl':['re!\w{2}'],
-			\'cs,lua,javascript':['re!\w{2}'],
-			\}
-
-let g:ycm_filetype_whitelist = {
-			\ "c":1,
-			\ "cpp":1,
-			\ "objc":1,
-			\ "sh":1,
-			\ "zsh":1,
-			\ "zimbu":1,
-			\}
-"""""""""""""""""""""""""""""""""""""""""""""""""""""
-""""""""""""""""""theme主题设置""""""""""""""""""""""
+""""" theme主题设置
 colorscheme gruvbox
 set background=dark
 "set background=light
